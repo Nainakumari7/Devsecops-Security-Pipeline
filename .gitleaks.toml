@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allow documentation examples that are clearly fake placeholders."
+regexTarget = "match"
+regexes = [
+  '''EXAMPLE_NOT_A_REAL_SECRET'''
+]

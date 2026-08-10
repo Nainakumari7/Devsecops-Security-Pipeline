@@ -1,0 +1,9 @@
+rules:
+  - id: insecure-flask-debug
+    languages: [python]
+    message: "Do not enable Flask debug mode in production."
+    severity: ERROR
+    pattern: app.run(..., debug=True, ...)
+    metadata:
+      category: security
+      confidence: HIGH
