@@ -19,11 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-
       - run: python -m pip install --upgrade pip
       - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
@@ -36,7 +34,6 @@ jobs:
       image: semgrep/semgrep:latest
     steps:
       - uses: actions/checkout@v6
-
       - name: Run Semgrep with severity gate
         run: semgrep scan --config semgrep.yml --error --severity ERROR
 
@@ -46,13 +43,10 @@ jobs:
     needs: tests
     steps:
       - uses: actions/checkout@v6
-
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-
       - run: python -m pip install --upgrade pip pip-audit
-
       - name: Audit runtime dependencies
         run: pip-audit -r requirements.txt --strict --desc
 
@@ -64,7 +58,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
       - uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,7 +74,7 @@ jobs:
         run: docker build -t devsecops-security-pipeline:${{ github.sha }} .
 
       - name: Scan image - HIGH/CRITICAL gate
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: devsecops-security-pipeline:${{ github.sha }}
           format: table
@@ -95,7 +88,6 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     needs: [semgrep, dependencies, gitleaks, trivy]
-
     steps:
       - name: Fail if any required security gate failed
         run: |
